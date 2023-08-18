@@ -63,3 +63,17 @@ class CatDogModel(object):
             return loss.item()
         
         return get_train_loss
+    
+    def _create_val_step_fn(self):
+
+        def get_val_loss(X, y):
+
+            self.model.eval()
+
+            y_hat = self.model(X)
+
+            loss = self.loss_fn(y_hat, y)
+
+            return loss.item()
+        
+        return get_val_loss
