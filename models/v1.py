@@ -1,3 +1,5 @@
+from torch.utils.tensorboard import SummaryWriter
+import torch
 import numpy as np
 
 from tqdm import tqdm
@@ -5,8 +7,6 @@ from tqdm import tqdm
 import matplotlib.pyplot as plt
 plt.style.use('fivethirtyeight')
 
-import torch
-from torch.utils.tensorboard import SummaryWriter
 
 class CatDogModel(object):
 
@@ -70,9 +70,9 @@ class CatDogModel(object):
             self.optimizer.zero_grad()
 
             return loss.item()
-        
+
         return get_train_loss
-    
+
     def _create_val_step_fn(self):
 
         def get_val_loss(X, y):
@@ -84,9 +84,9 @@ class CatDogModel(object):
             loss = self.loss_fn(y_hat, y)
 
             return loss.item()
-        
+
         return get_val_loss
-    
+
     def _get_minibatch_loss(self, validation=False):
 
         if validation:
@@ -111,7 +111,7 @@ class CatDogModel(object):
             minibatch_losses.append(loss)
 
         return np.mean(minibatch_losses)
-    
+
     def set_seed(self, seed=42):
 
         torch.backends.cudnn.deterministic = True
@@ -171,9 +171,9 @@ class CatDogModel(object):
         torch.save(checkpoint, filename)
 
     def load_checkpoint(self, filename):
-        
+
         checkpoint = torch.load(filename)
-        
+
         self.model.load_state_dict(
             checkpoint['model_state_dict']
         )
@@ -188,17 +188,17 @@ class CatDogModel(object):
         self.model.train()
 
     def predict(self, x):
-        
+
         self.model.eval()
-        
+
         x_tensor = torch.as_tensor(x).float()
-        
+
         y_hat_tensor = self.model(x_tensor.to(self.device))
-        
+
         self.model.train()
-        
+
         return y_hat_tensor.detach().cpu().numpy()
-    
+
     def plot_losses(self):
 
         fig = plt.figure(figsize=(8, 4))
@@ -206,7 +206,7 @@ class CatDogModel(object):
 
         if self.val_loader:
             plt.plot(self.val_losses, label='validation', c='r')
-            
+
         plt.yscale('log')
         plt.xlabel('Epochs')
         plt.ylabel('Loss')
@@ -214,6 +214,3 @@ class CatDogModel(object):
         plt.tight_layout()
 
         return fig
-
-
-
