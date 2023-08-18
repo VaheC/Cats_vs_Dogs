@@ -26,7 +26,7 @@ def create_csv():
 
     df = pd.DataFrame()
     df['file'] = file_list
-    df['class'] = class_list
+    df['pet'] = class_list
 
     os.chdir(cur_dir)
 
