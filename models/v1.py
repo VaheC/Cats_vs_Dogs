@@ -19,6 +19,22 @@ class CatDogModel(object):
         self.losses = []
         self.val_losses = []
 
+    def to(self, device):
+
+        try:
+
+            self.device = device
+
+            self.model.to(self.device)
+
+        except:
+
+            self.device = 'cuda' if torch.cuda.is_available() else 'cpu'
+
+            print(f"{device} is not available. Using {self.device} instead!!!")
+
+            self.model.to(self.device)
+
     def set_loaders(self, train_loader, val_loader=False):
 
         self.train_loader = train_loader
