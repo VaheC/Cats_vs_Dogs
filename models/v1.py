@@ -1,5 +1,7 @@
 import numpy as np
 
+from tqdm import tqdm
+
 import torch
 from torch.utils.tensorboard import SummaryWriter
 
@@ -17,6 +19,8 @@ class CatDogModel(object):
         self.val_loader = None
 
         self.writer = None
+
+        self.total_epochs = 0
 
         self.losses = []
         self.val_losses = []
@@ -112,6 +116,44 @@ class CatDogModel(object):
         torch.manual_seed(seed)
 
         np.random.seed(seed)
+
+    def train(self, n_epochs, seed=42):
+
+        self.set_seed(seed)
+
+        pbar = tqdm(range(n_epochs))
+
+        for epoch in pbar:
+
+            pbar.set_description(f"Epoch {epoch}")
+
+            self.total_epochs += 1
+
+            epoch_loss = self._get_minibatch_loss(validation=False)
+
+            self.losses.append(epoch_loss)
+
+            with torch.no_grad():
+
+                epoch_val_loss = self._get_minibatch_loss(validation=True)
+
+                self.val_losses.append(epoch_val_loss)
+
+            if self.writer:
+                scalars = {
+                    'training': epoch_loss
+                }
+                if epoch_val_loss is not None:
+                    scalars['validation'] = epoch_val_loss
+
+                self.writer.add_scalars(
+                    main_tag="loss",
+                    tag_scalar_dict=scalars,
+                    global_step=epoch
+                )
+
+        if self.writer:
+            self.writer.flush()
 
     
 
