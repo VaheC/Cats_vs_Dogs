@@ -2,6 +2,9 @@ import numpy as np
 
 from tqdm import tqdm
 
+import matplotlib.pyplot as plt
+plt.style.use('fivethirtyeight')
+
 import torch
 from torch.utils.tensorboard import SummaryWriter
 
@@ -195,6 +198,22 @@ class CatDogModel(object):
         self.model.train()
         
         return y_hat_tensor.detach().cpu().numpy()
+    
+    def plot_losses(self):
+
+        fig = plt.figure(figsize=(8, 4))
+        plt.plot(self.losses, label='training', c='b')
+
+        if self.val_loader:
+            plt.plot(self.val_losses, label='validation', c='r')
+            
+        plt.yscale('log')
+        plt.xlabel('Epochs')
+        plt.ylabel('Loss')
+        plt.legend()
+        plt.tight_layout()
+
+        return fig
 
 
 
