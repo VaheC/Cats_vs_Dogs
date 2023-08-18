@@ -1,3 +1,5 @@
+import numpy as np
+
 import torch
 from torch.utils.tensorboard import SummaryWriter
 
@@ -77,3 +79,31 @@ class CatDogModel(object):
             return loss.item()
         
         return get_val_loss
+    
+    def _get_minibatch_loss(self, validation=False):
+
+        if validation:
+            data_loader = self.val_loader
+            step_fn = self._create_val_step_fn
+        else:
+            data_loader = self.train_loader
+            step_fn = self._create_train_step_fn
+
+        if data_loader is None:
+            return None
+
+        minibatch_losses = []
+
+        for X_batch, y_batch in data_loader:
+
+            X_batch = X_batch.to(self.device)
+            y_batch = y_batch.to(self.device)
+
+            loss = step_fn(X_batch, y_batch)
+
+            minibatch_losses.append(loss)
+
+        return np.mean(minibatch_losses)
+
+
+
