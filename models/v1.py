@@ -155,6 +155,18 @@ class CatDogModel(object):
         if self.writer:
             self.writer.flush()
 
+    def save_checkpoint(self, filename):
+
+        checkpoint = {
+            "loss": self.losses,
+            "val_loss": self.val_losses,
+            "epoch": self.total_epochs,
+            "model_state_dict": self.model.state_dict(),
+            "optimizer_state_dict": self.optimizer.state_dict()
+        }
+
+        torch.save(checkpoint, filename)
+
     
 
 
