@@ -1,4 +1,5 @@
 import torch
+from torch.utils.tensorboard import SummaryWriter
 
 class CatDogModel(object):
 
@@ -23,6 +24,10 @@ class CatDogModel(object):
         self.train_loader = train_loader
 
         self.val_loader = val_loader
+
+    def set_tensorboard(self, name, folder="run"):
+
+        self.writer = SummaryWriter(f"{folder}/{name}")
 
     def _create_train_step_fn(self):
 
