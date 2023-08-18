@@ -10,8 +10,19 @@ class CatDogModel(object):
 
         self.device = 'cuda' if torch.cuda.is_available() else 'cpu'
 
+        self.train_loader = None
+        self.val_loader = None
+
+        self.writer = None
+
         self.losses = []
         self.val_losses = []
+
+    def set_loaders(self, train_loader, val_loader=False):
+
+        self.train_loader = train_loader
+
+        self.val_loader = val_loader
 
     def _create_train_step_fn(self):
 
