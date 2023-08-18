@@ -13,4 +13,21 @@ class CatDogModel(object):
         self.losses = []
         self.val_losses = []
 
-    
+    def _create_train_step_fn(self):
+
+        def get_train_loss(X, y):
+
+            self.model.train()
+
+            y_hat = self.model(X)
+
+            loss = self.loss_fn(y_hat, y)
+
+            loss.backward()
+
+            self.optimizer.step()
+            self.optimizer.zero_grad()
+
+            return loss.item()
+        
+        return get_train_loss
