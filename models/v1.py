@@ -104,6 +104,16 @@ class CatDogModel(object):
             minibatch_losses.append(loss)
 
         return np.mean(minibatch_losses)
+    
+    def set_seed(self, seed=42):
+
+        torch.backends.cudnn.deterministic = True
+        torch.backends.cudnn.benchmark = False
+        torch.manual_seed(seed)
+
+        np.random.seed(seed)
+
+    
 
 
 
