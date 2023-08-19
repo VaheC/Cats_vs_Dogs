@@ -18,6 +18,8 @@ class CatDogModel(object):
 
         self.device = 'cuda' if torch.cuda.is_available() else 'cpu'
 
+        self.model.to(self.device)
+
         self.train_loader = None
         self.val_loader = None
 
@@ -63,7 +65,7 @@ class CatDogModel(object):
 
             self.model.train()
 
-            y_hat = self.model(X)
+            y_hat = self.model(X).view(-1, )
 
             loss = self.loss_fn(y_hat, y)
 
@@ -82,7 +84,7 @@ class CatDogModel(object):
 
             self.model.eval()
 
-            y_hat = self.model(X)
+            y_hat = self.model(X).view(-1, )
 
             loss = self.loss_fn(y_hat, y)
 
