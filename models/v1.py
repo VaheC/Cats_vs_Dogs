@@ -28,6 +28,9 @@ class CatDogModel(object):
         self.losses = []
         self.val_losses = []
 
+        self.train_step_fn = self._create_train_step_fn()
+        self.val_step_fn = self._create_val_step_fn()
+
     def to(self, device):
 
         try:
@@ -91,10 +94,10 @@ class CatDogModel(object):
 
         if validation:
             data_loader = self.val_loader
-            step_fn = self._create_val_step_fn
+            step_fn = self.val_step_fn
         else:
             data_loader = self.train_loader
-            step_fn = self._create_train_step_fn
+            step_fn = self.train_step_fn
 
         if data_loader is None:
             return None
