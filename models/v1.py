@@ -1,10 +1,14 @@
 from torch.utils.tensorboard import SummaryWriter
 import torch
+
+from torchvision.transforms import ToTensor, CenterCrop
+
 import numpy as np
 
 from tqdm import tqdm
 
 import matplotlib.pyplot as plt
+import matplotlib.image as img
 plt.style.use('fivethirtyeight')
 
 
@@ -219,3 +223,45 @@ class CatDogModel(object):
         plt.tight_layout()
 
         return fig
+    
+    @staticmethod
+    def plot_misclassified_images(y, y_hat, image_names, bce_loss, n_images=None, pet_dict = {1: "cat", 0: "dog"}):
+
+        misclassified_images = [
+            (f"train/{pet_dict[y[i]]}/{image_names[i]}", bce_loss[i])
+            for i in range(len(image_names)) 
+            if y[i]!=y_hat[i]
+        ]
+
+        misclassified_images = sorted(misclassified_images, key=lambda x: x[1], reverse=True)
+
+        if n_images is not None:
+            misclassified_images = misclassified_images[:n_images]
+
+        n_images_per_row = 10
+
+        temp_remainder = len(misclassified_images) % n_images_per_row
+
+        n_rows = int((len(misclassified_images) - temp_remainder) / n_images_per_row)
+
+        if temp_remainder != 0:
+            n_rows += 1
+
+        fig_width = 2 * n_images_per_row
+        fig_height = 2 * n_rows
+
+        fig = plt.figure(figsize=(fig_width, fig_height))
+
+        for i in range(len(misclassified_images)):
+
+            plt.subplot(n_rows, n_images_per_row, i+1)
+            image_mat = img.imread(misclassified_images[i][0])
+            image_tensor = ToTensor()(image_mat.copy())
+            image_tensor = CenterCrop(224)(image_tensor)
+            new_image_mat = image_tensor.cpu().numpy()
+            new_image_mat = np.transpose(new_image_mat, (1, 2, 0))
+            plt.imshow(new_image_mat)
+            plt.grid(False)
+            plt.axis('off')
+
+        plt.tight_layout()
