@@ -225,7 +225,7 @@ class CatDogModel(object):
         return fig
     
     @staticmethod
-    def plot_misclassified_images(y, y_hat, image_names, bce_loss, n_images=None, pet_dict = {1: "cat", 0: "dog"}):
+    def plot_misclassified_images(y, y_hat, image_names, bce_loss, plot_title, n_images=None, pet_dict = {1: "cat", 0: "dog"}):
 
         misclassified_images = [
             (f"train/{pet_dict[y[i]]}/{image_names[i]}", bce_loss[i])
@@ -263,5 +263,7 @@ class CatDogModel(object):
             plt.imshow(new_image_mat)
             plt.grid(False)
             plt.axis('off')
+
+        plt.suptitle(plot_title, y=1.01)
 
         plt.tight_layout()
