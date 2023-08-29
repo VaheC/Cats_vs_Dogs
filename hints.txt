@@ -1,0 +1,15 @@
+VGG16, VGG19, Inception V3, Xception, and various flavors of ResNets
+
+https://github.com/mrgloom/kaggle-dogs-vs-cats-caffe/blob/master/README.md
+
+https://medium.com/kaggle-blog/dogs-vs-cats-redux-playground-competition-winners-interview-bojan-tunguz-7233c12e03bf
+
+https://discuss.pytorch.org/t/input-size-for-efficientnet-versions-from-torchvision-models/140525
+
+https://www.kaggle.com/competitions/dogs-vs-cats/leaderboard
+
+https://www.kaggle.com/competitions/dogs-vs-cats-redux-kernels-edition/leaderboard
+
+https://www.kaggle.com/tunguz/code
+
+https://www.kaggle.com/code/shaukathussain/cat-vs-dog-with-transfer-learning/notebook
